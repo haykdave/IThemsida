@@ -230,8 +230,16 @@ p {
   align-items: start;
 }
 
+/* 1) Alla kort får samma höjd */
 .date-card {
-  padding: 10px 12px;
+  min-height: 96px;                 /* samma höjd på alla */
+  display: flex;                    /* gör att innehållet centreras snyggt */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 12px;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.05);
@@ -239,33 +247,38 @@ p {
   font-size: 0.95rem;
   color: var(--text);
   text-decoration: none;
-  display: block;
+
   transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
 }
 
+/* 2) Split-korten ska också ha samma höjd och bra layout */
+.date-card--split {
+  min-height: 96px;                 /* samma höjd */
+  justify-content: center;           /* centrera inom kortet */
+  gap: 8px;
+}
+
+/* 3) Hover ska INTE ändra storlek – ta bort min-height från hover */
 .date-card:hover,
 .date-card:focus-visible {
-  transform: translateY(-1px);
+  transform: translateY(-1px);       /* ok: bara “lyft” visuellt */
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(34, 211, 238, 0.35);
-  min-height: 96px;
 }
+
+/* 4) Undertexten ska alltid se bra ut */
+.date-sub {
+  font-size: 0.82rem;
+  color: #d9d9d9;
+  opacity: 0.9;
+}
+
 .date-card:not(.date-card--split) {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 4px;
-}
-.date-sub {
-  font-size: 0.82rem;
-  color: #d9d9d9;
-}
-
-.date-card--split {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 .date-label { font-weight: 700; }
@@ -329,4 +342,56 @@ p {
 @media (max-width: 420px) {
   .cta-card { width: 100%; }
   .accordion details { padding: 12px 14px; }
+}
+
+/* Fancy cursor ONLY on desktop (devices with mouse + hover) */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none; /* hide default cursor */
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 0 18px rgba(124, 58, 237, 0.35);
+  }
+
+  .cursor-ring {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 2px solid rgba(34, 211, 238, 0.45);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+    transition: width 120ms ease, height 120ms ease, border-color 120ms ease, opacity 120ms ease;
+    opacity: 0.95;
+  }
+
+  /* Make it feel interactive on clickable stuff */
+  a:hover ~ .cursor-ring,
+  button:hover ~ .cursor-ring {
+    width: 44px;
+    height: 44px;
+    border-color: rgba(124, 58, 237, 0.55);
+  }
+}
+
+/* On touch devices: hide the custom cursor elements */
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
 }
