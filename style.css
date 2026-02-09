@@ -223,6 +223,18 @@ p {
   color: var(--text);
   text-decoration: none;
   display: block;
+  min-height: 96px;
+}
+.date-card:not(.date-card--split) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+.date-sub {
+  font-size: 0.82rem;
+  color: #d9d9d9;
 }
 .date-card--split {
   display: flex;
