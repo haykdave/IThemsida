@@ -82,6 +82,13 @@ p {
   color: #fff;
 }
 
+.cta-row {
+  display: flex;
+  gap: 35px;
+  justify-content: center;
+  flex-wrap: wrap; /* gör att de kan brytas på mobil */
+}
+
 /* Modern CTA button/card */
 .cta-card {
   margin-top: 22px;
