@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tenta AI - IT Uppsala</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+        },
+        svg: {
+          fontCache: "global",
+        },
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <h1>Vår Tenta AI</h1>
+        <p>Generera skräddarsydda övningstentor baserat på tidigare års prov.</p>
+      </header>
+
+      <main class="page-content ai-layout">
+        <a class="cta-card back-btn" href="index.html">← Tillbaka</a>
+
+        <div class="ai-controls surface-card">
+          <div class="input-group">
+            <label for="course-select">Välj Kurs</label>
+            <select id="course-select" class="modern-select">
+              <option value="" disabled selected>Välj en kurs...</option>
+              <option value="algebra1">Algebra 1</option>
+              <option value="pkd1">PKD (Part 1)</option>
+              <option value="pkd2">PKD (Part 2)</option>
+              <option value="envarre">Envariabelanalys</option>
+              <option value="dark">Datorarkitektur</option>
+             <! <option value="ioopmC">IOOPM (C)</option> -->
+             <! <option value="ioopmJava">IOOPM (Java)</option> -->
+              <option value="linalg1">Linjär Algebra 1</option>
+              <option value="linalg2">Linjär Algebra 2</option>
+              <option value="sysdes">Systemdesign med ett användarperspektiv</option>
+              <option value="sanstat">Sannolikhet och statistik</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="type-select">Typ av övning</label>
+            <select id="type-select" class="modern-select">
+              <option value="mini">Mini-Quiz</option>
+              <option value="full">Hel Tenta</option> 
+              <option value="hard">Bara VG-frågor (Nivå 5)</option>
+            </select>
+          </div>
+
+          <button id="generate-btn" class="cta-card generate-btn">
+            <span class="btn-text">Generera Tenta</span>
+            <div class="spinner hidden" id="loading-spinner"></div>
+          </button>
+        </div>
+
+        <div id="ai-output-container" class="ai-output-container hidden surface-card">
+          <div class="output-header">
+            <h2 id="output-course-title">Genererad Tenta</h2>
+            <button id="toggle-facit-btn" class="pill-button hidden">Visa Facit</button>
+          </div>
+          
+          <div id="exam-content" class="markdown-body">
+            </div>
+
+          <div id="facit-content" class="markdown-body facit-box hidden">
+            </div>
+        </div>
+
+      </main>
+
+      <footer class="page-footer">
+        <div class="footer-left">
+          <span>&copy; Hayk Davtyan & Nasser Jemal</span>
+        </div>
+      </footer>
+    </div>
+
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring" aria-hidden="true"></div>
+    <script src="script.js"></script>
+    <script src="ai-script.js"></script>
+  </body>
+</html>
