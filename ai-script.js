@@ -107,46 +107,109 @@
   }
 
   function renderSimpleMarkdown(markdown) {
-    const escaped = escapeHtml(markdown);
-    const blocks = escaped.split(/\n\s*\n/);
+    const lines = markdown.replace(/\r/g, "").split("\n");
+    const html = [];
+    let index = 0;
 
-    return blocks
-      .map((block) => {
-        const trimmed = block.trim();
+    while (index < lines.length) {
+      const line = lines[index].trim();
 
-        if (!trimmed) {
-          return "";
+      if (!line) {
+        index += 1;
+        continue;
+      }
+
+      if (/^---+$/.test(line)) {
+        html.push("<hr />");
+        index += 1;
+        continue;
+      }
+
+      const headingMatch = line.match(/^(#{1,3})\s+(.+)$/);
+      if (headingMatch) {
+        const level = headingMatch[1].length;
+        html.push(`<h${level}>${inlineFormat(headingMatch[2])}</h${level}>`);
+        index += 1;
+        continue;
+      }
+
+      if (/^[-*]\s+/.test(line)) {
+        const items = [];
+
+        while (index < lines.length && /^[-*]\s+/.test(lines[index].trim())) {
+          items.push(`<li>${inlineFormat(lines[index].trim().replace(/^[-*]\s+/, ""))}</li>`);
+          index += 1;
         }
 
-        if (trimmed.startsWith("### ")) {
-          return `<h3>${inlineFormat(trimmed.slice(4))}</h3>`;
+        html.push(`<ul>${items.join("")}</ul>`);
+        continue;
+      }
+
+      if (/^\d+\.\s+/.test(line)) {
+        const items = [];
+
+        while (index < lines.length && /^\d+\.\s+/.test(lines[index].trim())) {
+          items.push(`<li>${inlineFormat(lines[index].trim().replace(/^\d+\.\s+/, ""))}</li>`);
+          index += 1;
         }
 
-        if (trimmed.startsWith("## ")) {
-          return `<h2>${inlineFormat(trimmed.slice(3))}</h2>`;
+        html.push(`<ol>${items.join("")}</ol>`);
+        continue;
+      }
+
+      const paragraphLines = [];
+
+      while (index < lines.length) {
+        const current = lines[index].trim();
+
+        if (
+          !current ||
+          /^---+$/.test(current) ||
+          /^(#{1,3})\s+/.test(current) ||
+          /^[-*]\s+/.test(current) ||
+          /^\d+\.\s+/.test(current)
+        ) {
+          break;
         }
 
-        if (trimmed.startsWith("# ")) {
-          return `<h1>${inlineFormat(trimmed.slice(2))}</h1>`;
-        }
+        paragraphLines.push(lines[index].trim());
+        index += 1;
+      }
 
-        const lines = trimmed.split("\n");
-        const isList = lines.every((line) => /^[-*]\s+/.test(line));
+      if (paragraphLines.length) {
+        html.push(renderParagraph(paragraphLines));
+        continue;
+      }
 
-        if (isList) {
-          const items = lines
-            .map((line) => `<li>${inlineFormat(line.replace(/^[-*]\s+/, ""))}</li>`)
-            .join("");
-          return `<ul>${items}</ul>`;
-        }
+      index += 1;
+    }
 
-        return `<p>${inlineFormat(trimmed).replace(/\n/g, "<br />")}</p>`;
-      })
-      .join("");
+    return html.join("");
   }
 
   function inlineFormat(text) {
-    return text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    return escapeHtml(text)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+
+  function renderParagraph(lines) {
+    const content = lines.map((line) => inlineFormat(line)).join("<br />");
+    const firstLine = lines[0] || "";
+
+    if (/^(\d+[\.:]|uppgift\s+\d+[:]?)/i.test(firstLine)) {
+      return `<p class="question-line">${content}</p>`;
+    }
+
+    if (/^[a-z]\)/i.test(firstLine)) {
+      return `<p class="subquestion-line">${content}</p>`;
+    }
+
+    if (/^\*\*poang:\*\*/i.test(firstLine) || /^\*\*kort svar:\*\*/i.test(firstLine)) {
+      return `<p class="meta-line">${content}</p>`;
+    }
+
+    return `<p>${content}</p>`;
   }
 
   function escapeHtml(value) {

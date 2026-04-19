@@ -537,11 +537,82 @@ p {
 .markdown-body {
   color: var(--text);
   line-height: 1.6;
+  font-size: 1rem;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+  font-family: "Space Grotesk", sans-serif;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.markdown-body h1 {
+  font-size: clamp(1.7rem, 2.8vw, 2.2rem);
+  margin: 0 0 18px;
+}
+
+.markdown-body h2 {
+  margin: 32px 0 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--accent2);
+  font-size: 1.25rem;
 }
 
 .markdown-body h3 {
   color: var(--accent2);
-  margin-top: 24px;
+  margin: 24px 0 12px;
+  font-size: 1.05rem;
+}
+
+.markdown-body p {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 18px 0;
+  padding-left: 22px;
+}
+
+.markdown-body li {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.markdown-body strong {
+  color: #fff;
+}
+
+.markdown-body hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 24px 0;
+}
+
+.markdown-body .question-line,
+.markdown-body .subquestion-line,
+.markdown-body .meta-line {
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.markdown-body .question-line {
+  border-left: 4px solid rgba(34, 211, 238, 0.9);
+}
+
+.markdown-body .subquestion-line {
+  border-left: 4px solid rgba(124, 58, 237, 0.9);
+  margin-left: 10px;
+}
+
+.markdown-body .meta-line {
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.18);
 }
 
 .facit-box {
@@ -550,4 +621,20 @@ p {
   background: rgba(124, 58, 237, 0.1);
   border-left: 4px solid var(--accent);
   border-radius: 0 12px 12px 0;
+}
+
+@media (max-width: 720px) {
+  .output-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .surface-card {
+    padding: 18px;
+  }
+
+  .markdown-body .subquestion-line {
+    margin-left: 0;
+  }
 }
