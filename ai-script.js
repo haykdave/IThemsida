@@ -73,6 +73,8 @@
       examContent.innerHTML = renderSimpleMarkdown(payload.examMarkdown || "");
       facitContent.innerHTML = renderSimpleMarkdown(payload.answerKeyMarkdown || "");
       outputContainer.classList.remove("hidden");
+      renderMath(examContent);
+      renderMath(facitContent);
 
       if (payload.answerKeyMarkdown) {
         toggleFacitBtn.classList.remove("hidden");
@@ -89,6 +91,10 @@
     facitVisible = !facitVisible;
     facitContent.classList.toggle("hidden", !facitVisible);
     toggleFacitBtn.textContent = facitVisible ? "Dölj Facit" : "Visa Facit";
+
+    if (facitVisible) {
+      renderMath(facitContent);
+    }
   });
 
   function setLoading(isLoading) {
@@ -210,6 +216,16 @@
     }
 
     return `<p>${content}</p>`;
+  }
+
+  function renderMath(container) {
+    if (!container || !window.MathJax?.typesetPromise) {
+      return;
+    }
+
+    window.MathJax.typesetPromise([container]).catch((error) => {
+      console.error("MathJax kunde inte rendera matematiken.", error);
+    });
   }
 
   function escapeHtml(value) {
